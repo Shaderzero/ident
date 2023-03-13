@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LogSuite.Server.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
