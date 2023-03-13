@@ -1,0 +1,31 @@
+@using Newtonsoft.Json;
+@using System.Text;
+
+<a href="@Link" @onclick="Worker" @onclick:preventDefault>@Text</a>
+
+@code {
+    [Inject] HttpClient Client { get; set; } //обращение к клиенту
+    [Inject] public NavigationManager navigationManager { get; set; } //обеспечение перехода к ссылке
+    [Parameter] public string Link { get; set; } //ссылка для отображения
+    [Parameter] public string NavigationLink { get; set; } //ссылка для перехода (опционально)
+    [Parameter] public string Text { get; set; } //текст для отображения
+    [Parameter] public object PostObject { get; set; } //объекта для передачи в метод Post (опционально)
+
+    private async Task Worker()
+    {
+        var content = JsonConvert.SerializeObject(PostObject);
+        var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+        var response = await Client.PostAsync(Link, bodyContent);
+
+        if (response.IsSuccessStatusCode)
+        {
+            //do job
+            if (NavigationLink != null)
+                navigationManager.NavigateTo(NavigationLink);
+        }
+        else
+        {
+            //do job
+        }
+    }
+}
